@@ -18,7 +18,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  const port = process.env.PORT || 4001;
+  const port = process.env.PORT || 4000;
   await app.listen(port, '0.0.0.0');
   console.log(`Backend is running on http://localhost:${port}`);
   console.log(`Swagger UI is available on http://localhost:${port}/api`);
