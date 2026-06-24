@@ -61,8 +61,19 @@ export class SyncService implements OnApplicationBootstrap {
     status: 'NOW_PLAYING' | 'UPCOMING',
     apiKey: string,
   ): Promise<number[]> {
-    const url = `https://api.themoviedb.org/3/movie/${endpoint}?api_key=${apiKey}&region=VN&language=en-US&page=1`;
-    const response = await firstValueFrom(this.httpService.get(url));
+    let url: string;
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+
+    if (apiKey.startsWith('ey')) {
+      // It's a v4 Read Access Token (JWT Bearer Token)
+      url = `https://api.themoviedb.org/3/movie/${endpoint}?region=VN&language=en-US&page=1`;
+      headers['Authorization'] = `Bearer ${apiKey}`;
+    } else {
+      // It's a standard v3 API Key
+      url = `https://api.themoviedb.org/3/movie/${endpoint}?api_key=${apiKey}&region=VN&language=en-US&page=1`;
+    }
+
+    const response = await firstValueFrom(this.httpService.get(url, { headers }));
     const results = response.data?.results || [];
     const savedIds: number[] = [];
 
