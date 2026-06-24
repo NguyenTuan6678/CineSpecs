@@ -4,7 +4,10 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors(); // Enable CORS for API requests
+  app.enableCors({
+    origin: '*', // Sau này app ổn định thì thay dấu * bằng URL Cloudflare Pages của bạn
+    credentials: true,
+  });
 
   // Configure Swagger Document
   const config = new DocumentBuilder()
@@ -15,8 +18,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  const port = process.env.PORT ?? 4000;
-  await app.listen(port);
+  const port = process.env.PORT || 4001;
+  await app.listen(port, '0.0.0.0');
   console.log(`Backend is running on http://localhost:${port}`);
   console.log(`Swagger UI is available on http://localhost:${port}/api`);
 }

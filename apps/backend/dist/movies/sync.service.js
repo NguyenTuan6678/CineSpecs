@@ -81,7 +81,7 @@ let SyncService = SyncService_1 = class SyncService {
                 overview: item.overview || 'No description available.',
                 releaseDate: item.release_date || new Date().toISOString().split('T')[0],
                 status,
-            }, { upsert: true, new: true }).exec();
+            }, { upsert: true, returnDocument: 'after' }).exec();
             savedIds.push(item.id);
         }
         return savedIds;
@@ -175,7 +175,7 @@ let SyncService = SyncService_1 = class SyncService {
             },
         ];
         for (const movie of mockMovies) {
-            await this.movieModel.findOneAndUpdate({ tmdbId: movie.tmdbId }, movie, { upsert: true, new: true }).exec();
+            await this.movieModel.findOneAndUpdate({ tmdbId: movie.tmdbId }, movie, { upsert: true, returnDocument: 'after' }).exec();
         }
         this.logger.log('Mock movie data seeded successfully!');
     }

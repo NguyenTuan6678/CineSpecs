@@ -84,7 +84,7 @@ export class SyncService implements OnApplicationBootstrap {
           releaseDate: item.release_date || new Date().toISOString().split('T')[0],
           status,
         },
-        { upsert: true, new: true },
+        { upsert: true, returnDocument: 'after' },
       ).exec();
 
       savedIds.push(item.id);
@@ -194,7 +194,7 @@ export class SyncService implements OnApplicationBootstrap {
       await this.movieModel.findOneAndUpdate(
         { tmdbId: movie.tmdbId },
         movie,
-        { upsert: true, new: true },
+        { upsert: true, returnDocument: 'after' },
       ).exec();
     }
 
